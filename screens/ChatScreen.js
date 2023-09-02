@@ -35,7 +35,9 @@ const ChatScreen = ({ navigation, route }) => {
           <Avatar
             rounded
             source={{
-              uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png",
+              uri:
+                messages[0]?.data.photoURL ||
+                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png",
             }}
           />
           <Text style={{ color: "white", marginLeft: 10, fontWeight: "700" }}>
@@ -66,7 +68,7 @@ const ChatScreen = ({ navigation, route }) => {
         </View>
       ),
     });
-  }, []);
+  }, [navigation, messages]);
 
   const sendMessage = () => {
     Keyboard.dismiss();
@@ -111,7 +113,7 @@ const ChatScreen = ({ navigation, route }) => {
             activeOpacity={0.5}
           >
             <>
-              <ScrollView>
+              <ScrollView contentContainerStyle={{ padding: 15 }}>
                 {messages.map(({ id, data }) =>
                   data.email === auth.currentUser.email ? (
                     <View key={id} style={styles.receiver}>
@@ -150,6 +152,7 @@ const ChatScreen = ({ navigation, route }) => {
                         }}
                       />
                       <Text style={styles.senderText}>{data.message}</Text>
+                      <Text style={styles.senderName}>{data.displayName}</Text>
                     </View>
                   )
                 )}
@@ -160,7 +163,7 @@ const ChatScreen = ({ navigation, route }) => {
                   placeholder="Signal Message"
                   style={styles.textInput}
                   value={input}
-                  onChangeText={(text) => setInput(value)}
+                  onChangeText={(text) => setInput(text)}
                 />
                 <TouchableOpacity onPress={sendMessage} activeOpacity={0.5}>
                   <Ionicons name="send" size={24} color="#2B6BE6" />
@@ -180,11 +183,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  senderText: {
+    color: "white",
+    fontWeight: "500",
+    marginLeft: 10,
+    marginBottom: 15,
+  },
+  receiverText: {
+    color: "black",
+    fontWeight: "500",
+    marginLeft: 10,
+  },
   footer: {
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
     padding: 15,
+  },
+  senderName: {
+    left: 10,
+    paddingRight: 10,
+    fontSize: 10,
+    color: "white",
   },
   textInput: {
     bottom: 0,
