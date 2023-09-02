@@ -9,19 +9,25 @@ import React, { useState, useEffect } from "react";
 import { Button, Input, Image } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
 import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      console.log(authUser);
       if (authUser) {
         navigation.replace("Home");
       }
     });
     return unsubscribe;
   }, []);
-  const signIn = ({ navigation }) => {};
+  const signIn = () => {
+    signInWithEmailAndPassword(auth, email, password).catch((error) =>
+      alert(error.message)
+    );
+  };
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <StatusBar style="light" />
@@ -45,6 +51,7 @@ const LoginScreen = ({ navigation }) => {
           type="password"
           value={password}
           onChangeText={(text) => setPassword(text)}
+          onSubmitEditing={signIn}
         />
       </View>
       <Button containerStyle={styles.button} onPress={signIn} title="Login" />
