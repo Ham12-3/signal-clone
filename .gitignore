@@ -33,3 +33,8 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+firebase.json
+.firebaserc
+web-build
+.firebase
+
