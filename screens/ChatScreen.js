@@ -111,7 +111,49 @@ const ChatScreen = ({ navigation, route }) => {
             activeOpacity={0.5}
           >
             <>
-              <ScrollView></ScrollView>
+              <ScrollView>
+                {messages.map(({ id, data }) =>
+                  data.email === auth.currentUser.email ? (
+                    <View key={id} style={styles.receiver}>
+                      <Avatar
+                        position="absolute"
+                        bottom={-15}
+                        containerStyle={{
+                          position: "absolute",
+                          bottom: -15,
+                          right: -5,
+                        }}
+                        right={-5}
+                        size={30}
+                        rounded
+                        source={{
+                          uri: data.photoURL,
+                        }}
+                      />
+                      <Text style={styles.receiverText}>{data.message}</Text>
+                    </View>
+                  ) : (
+                    <View style={styles.sender}>
+                      <Avatar
+                        position="absolute"
+                        bottom={-15}
+                        containerStyle={{
+                          position: "absolute",
+                          bottom: -15,
+                          left: -5,
+                        }}
+                        right={-5}
+                        size={30}
+                        rounded
+                        source={{
+                          uri: data.photoURL,
+                        }}
+                      />
+                      <Text style={styles.senderText}>{data.message}</Text>
+                    </View>
+                  )
+                )}
+              </ScrollView>
               <View style={styles.footer}>
                 <TextInput
                   onSubmitEditing={sendMessage}
@@ -155,5 +197,26 @@ const styles = StyleSheet.create({
     padding: 10,
     color: "gray",
     borderRadius: 30,
+  },
+  receiverText: {},
+  receiver: {
+    padding: 15,
+    backgroundColor: "#ECECEC",
+    alignSelf: "flex-end",
+    borderRadius: 20,
+    marginRight: 15,
+    marginBottom: 20,
+    maxWidth: "80%",
+    position: "relative",
+  },
+  sender: {
+    padding: 15,
+    backgroundColor: "#2B6BE6",
+    alignSelf: "flex-start",
+    borderRadius: 20,
+    marginRight: 15,
+    marginBottom: 20,
+    maxWidth: "80%",
+    position: "relative",
   },
 });
