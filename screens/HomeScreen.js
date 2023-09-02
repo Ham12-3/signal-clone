@@ -11,6 +11,7 @@ import CustomListItem from "../components/CustomListItem";
 import { Avatar } from "@rneui/base";
 import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
+import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 const HomeScreen = ({ navigation }) => {
   const signOutUser = () => {
     auth.signOut().then(() => {
@@ -30,15 +31,16 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       ),
-      // headerRight: {},
+      headerRight: () => {
+        <View style={{}}></View>;
+      },
     });
   }, []);
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <CustomListItem />
-      </ScrollView>
-    </SafeAreaView>
+    // <SafeAreaView>
+    <ScrollView>
+      <CustomListItem />
+    </ScrollView>
   );
 };
 
