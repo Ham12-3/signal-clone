@@ -3,7 +3,7 @@ import React from "react";
 import { ListItem, Avatar } from "@rneui/base";
 const CustomListItem = ({ id, chatName, enterChat }) => {
   return (
-    <ListItem>
+    <ListItem onPress={() => enterChat(id, chatName)} key={id} bottomDivider>
       <Avatar
         rounded
         source={{
@@ -11,10 +11,8 @@ const CustomListItem = ({ id, chatName, enterChat }) => {
         }}
       />
       <ListItem.Content containerStyle={{ fontWeight: "900" }}>
-        <ListItem.Title>Youtube Chat</ListItem.Title>
-        <ListItem.Subtitle numberOfLines={1}>
-          This is a test subtitle
-        </ListItem.Subtitle>
+        <ListItem.Title>{chatName}</ListItem.Title>
+        <ListItem.Subtitle numberOfLines={1}>ABC</ListItem.Subtitle>
       </ListItem.Content>
     </ListItem>
   );
