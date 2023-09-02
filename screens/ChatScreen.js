@@ -16,8 +16,11 @@ import { Avatar } from "@rneui/base";
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 // import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import firebase from "firebase/compat/app";
+import { db, auth } from "../firebase";
 const ChatScreen = ({ navigation, route }) => {
   const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Chat",
@@ -67,7 +70,33 @@ const ChatScreen = ({ navigation, route }) => {
 
   const sendMessage = () => {
     Keyboard.dismiss();
+    db.collection("chats").doc(route.params.id).collection("messages").add({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      message: input,
+      displayName: auth.currentUser.displayName,
+      email: auth.currentUser.email,
+      photoURL: auth.currentUser.photoURL,
+    });
+
+    setInput("");
   };
+
+  useLayoutEffect(() => {
+    const unsubscribe = db
+      .collection("chats")
+      .doc(route.params.id)
+      .collection("messages")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) =>
+        setMessages(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        )
+      );
+    return unsubscribe;
+  }, [route]);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar style="light" />
@@ -85,6 +114,7 @@ const ChatScreen = ({ navigation, route }) => {
               <ScrollView></ScrollView>
               <View style={styles.footer}>
                 <TextInput
+                  onSubmitEditing={sendMessage}
                   placeholder="Signal Message"
                   style={styles.textInput}
                   value={input}
